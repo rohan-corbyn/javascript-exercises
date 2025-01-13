@@ -35,6 +35,8 @@ module.exports = function (plop) {
     const basePath = join(`./${formattedChapterName}/`, formattedExerciseName);
     const solutionPath = join(basePath, "solution");
 
+      console.log(solutionPath)
+      console.log(basePath)
     //write
     // ---------------- //
 

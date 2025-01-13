@@ -61,7 +61,7 @@ async function createChapterDirectoryName(directoryName) {
 function splitDirectoryName(directoryName) {
   return {
     exerciseNumber: directoryName.match(/\d+/),
-    exerciseName: directoryName.match(/[a-z]+/i),
+    exerciseName: directoryName.match(/[a-z]+/ig)[1],
   };
 }
 
