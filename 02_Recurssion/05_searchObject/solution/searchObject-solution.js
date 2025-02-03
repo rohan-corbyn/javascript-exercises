@@ -1,10 +1,15 @@
-const searchObject = function (nestedObject, value) {
-  if (typeof nestedObject === 'object') {
-    return Object.keys(nestedObject).some(key => {
-      searchObject(nestedObject[key], value);
-    });
+const searchObject = function (nestedObject, searchValue) {
+  if (typeof nestedObject !== "object" || nestedObject === null) {
+    return nestedObject === searchValue;
   }
-    return nestedObject === value;
+
+  for (const value of Object.values(nestedObject)) {
+    if (contains(value, searchValue)) {
+      return true;
+    }
+  }
+
+    return false;
 };
 
 // Do not edit below this line
