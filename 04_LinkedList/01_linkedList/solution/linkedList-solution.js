@@ -1,169 +1,30 @@
-// FACTORY SOLUTION
-
-// function LinkedList() {
-
-//   let firstNode = undefined;
-
-//   const tail = () => {
-//     let thisNode = firstNode;
-//     while (thisNode && thisNode.nextNode) {
-//       thisNode = thisNode.nextNode;
-//     }
-//     return thisNode;
-//   }
-
-//   return {
-
-//     append: (value) => {
-//       const newNode = Node(value);
-//       const lastNode = tail();
-//       if (lastNode) {
-//         lastNode.nextNode = newNode;
-//       } else {
-//         firstNode = newNode;
-//       }
-//     },
-
-//     prepend: (value) => {
-//       const newNode = Node(value);
-//       newNode.nextNode = firstNode
-//       firstNode = newNode;
-//     },
-
-//     toString: () => {
-//       let thisNode = firstNode;
-//       let string = "";
-//       while (thisNode) {
-//         string += "( " + thisNode.value + " )";
-//         string += " => ";
-//         thisNode = thisNode.nextNode;
-//       }
-//       string += "null";
-//       return string;
-//     },
-
-//     size: () => {
-//       let thisNode = firstNode;
-//       let count = 0;
-//       while (thisNode) {
-//         count++;
-//         thisNode = thisNode.nextNode;
-//       }
-//       return count;
-//     },
-
-//     head: () => {
-//       return firstNode;
-//     },
-
-//     tail: tail,
-
-//     atIndex: (index) => {
-//       let i = 0;
-//       let thisNode = firstNode;
-//       while (thisNode && i != index) {
-//         thisNode = thisNode.nextNode;
-//         i++;
-//       }
-//       return thisNode;
-//     },
-
-//     pop: () => {
-//       let thisNode = firstNode;
-//       if (firstNode) {
-//         while (thisNode.nextNode && thisNode.nextNode.nextNode) {
-//           thisNode = thisNode.nextNode;
-//         }
-//         thisNode.nextNode = null;
-//       }
-//     },
-
-//     contains: (value) => {
-//       let thisNode = firstNode;
-//       while (thisNode) {
-//         if (thisNode.value === value) {
-//           return true;
-//         }
-//         thisNode = thisNode.nextNode;
-//       }
-//       return false;
-//     },
-
-//     find: (value) => {
-//       let thisNode = firstNode;
-//       let i = 0;
-//       while (thisNode) {
-//         if (thisNode.value === value) {
-//           return i;
-//         }
-//         thisNode = thisNode.nextNode;
-//         i++;
-//       }
-//       return -1;
-//     }
-//   }
-// }
-
-// function Node(value) {
-
-//   return {
-//     value: value,
-//     nextNode: undefined
-//   }
-// }
-
-// module.exports = LinkedList;
-
-// CLASS SOLUTION
-
 class LinkedList {
-
   constructor() {
     this.firstNode = undefined;
   }
 
   tail() {
-    let thisNode = this.firstNode;
-    while (thisNode && thisNode.nextNode) {
-      thisNode = thisNode.nextNode;
+    let current = this.firstNode;
+    while (current?.nextNode) {
+      current = current.nextNode;
     }
-    return thisNode;
+    return current;
   }
 
   append(value) {
     const newNode = new Node(value);
-    const lastNode = this.tail();
-    if (lastNode) {
-      lastNode.nextNode = newNode;
-    } else {
-      this.firstNode = newNode;
-    }
+    this.firstNode ? this.tail().nextNode = newNode : this.firstNode = newNode;
   }
 
   prepend(value) {
-    const newNode = new Node(value);
-    newNode.nextNode = this.firstNode
-    this.firstNode = newNode;
-  }
-
-  toString() {
-    let thisNode = this.firstNode;
-    let string = "";
-    while (thisNode) {
-      string += "( " + thisNode.value + " )";
-      string += " => ";
-      thisNode = thisNode.nextNode;
-    }
-    string += "null";
-    return string;
+    this.firstNode = new Node(value, this.firstNode);
   }
 
   size() {
-    let thisNode = this.firstNode;
-    let count = 0;
-    while (thisNode) {
+    let current = this.firstNode, count = 0;
+    while (current) {
       count++;
-      thisNode = thisNode.nextNode;
+      current = current.nextNode;
     }
     return count;
   }
@@ -173,54 +34,91 @@ class LinkedList {
   }
 
   atIndex(index) {
-    let i = 0;
-    let thisNode = this.firstNode;
-    while (thisNode && i != index) {
-      thisNode = thisNode.nextNode;
-      i++;
-    }
-    return thisNode;
+    let current = this.firstNode, i = 0;
+    while (current && i++ < index) current = current.nextNode;
+    return current;
   }
 
   pop() {
-    let thisNode = this.firstNode;
-    if (this.firstNode) {
-      while (thisNode.nextNode && thisNode.nextNode.nextNode) {
-        thisNode = thisNode.nextNode;
-      }
-      thisNode.nextNode = null;
-    }
+    if (!this.firstNode) return;
+    if (!this.firstNode.nextNode) return this.firstNode = null;
+    let current = this.firstNode;
+    while (current.nextNode?.nextNode) current = current.nextNode;
+    current.nextNode = null;
   }
 
   contains(value) {
-    let thisNode = this.firstNode;
-    while (thisNode) {
-      if (thisNode.value === value) {
-        return true;
-      }
-      thisNode = thisNode.nextNode;
+    let current = this.firstNode;
+    while (current) {
+      if (current.value === value) return true;
+      current = current.nextNode;
     }
     return false;
   }
 
   find(value) {
-    let thisNode = this.firstNode;
-    let i = 0;
-    while (thisNode) {
-      if (thisNode.value === value) {
-        return i;
-      }
-      thisNode = thisNode.nextNode;
+    let current = this.firstNode, i = 0;
+    while (current) {
+      if (current.value === value) return i;
+      current = current.nextNode;
       i++;
     }
     return -1;
   }
+
+  toString() {
+    let current = this.firstNode, string = "";
+    while (current) {
+      string += `( ${current.value} ) => `;
+      current = current.nextNode;
+    }
+    return string + "null";
+  }
+
+  insertAt(value, index) {
+    let newNode = new Node(value);
+    let current = this.firstNode;
+    let prevNode = null;
+    let i = 0;
+
+    while (current && i++ < index) {
+      prevNode = current;
+      current = current.nextNode;
+    }
+    newNode.nextNode = current;
+
+    if (prevNode) {
+      prevNode.nextNode = newNode;
+    } else {
+      this.firstNode = newNode;
+    }
+  }
+
+
+  removeAt(index) {
+    if (index < 0 || !this.firstNode) return null;
+
+    let current = this.firstNode, prevNode = null, i = 0;
+
+    while (current && i++ < index) {
+      prevNode = current;
+      current = current.nextNode;
+    }
+
+    if (!current) return null;
+
+    if (prevNode) {
+      prevNode.nextNode = current.nextNode;
+    } else {
+      this.firstNode = current.nextNode;
+    }
+  }
 }
 
 class Node {
-  constructor(value) {
+  constructor(value, nextNode = null) {
     this.value = value;
-    this.nextNode = undefined;
+    this.nextNode = nextNode;
   }
 }
 
